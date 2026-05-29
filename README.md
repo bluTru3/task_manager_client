@@ -1,62 +1,73 @@
-# Task Manager Client
+# Task Manager Frontend - ESE Assignment Submission
 
-This app includes a frontend auth flow wired to a backend API.
+## Assignment Information
 
-## Backend Contract
+- **Module:** ESE1 - Enterprise Software Engineering
+- **Student:** Brittney Lightfoot
+- **Submission Date:** May 2026
 
-The frontend calls these endpoints by default:
+---
 
-- `POST /api/auth/register/`
-- `POST /api/auth/login/`
-- `GET /api/auth/profile/` (`/api/auth/me/` also supported by backend)
-- `PATCH /api/auth/profile/` (`/api/auth/me/` alias)
-- `POST /api/auth/token/refresh/`
+## Project Overview
 
-The API may return the user directly or nested under `user`, `profile`, `account`, or `data`.
+A React-based frontend for the Task Manager API. Provides user authentication (register/login) and task management interface.
 
-JWT transport:
+### Live Application
 
-- Tokens are read from `access` and `refresh` response fields.
-- Authenticated requests send `Authorization: Bearer <access>`.
-- On `401`, protected requests rotate the access token with the refresh token and retry once.
+**Frontend URL:** (https://fuzzy-giggle-6jg7xpr4w99frgv5-5174.app.github.dev/)
 
-## Environment
+**Backend API:** (https://humble-broccoli-7g94jxrpxvv2x7pv-8000.app.github.dev/)
 
-Set the API base URL in `.env`:
+### Technology Stack
+
+| Component | Technology |
+|-----------|------------|
+| Framework | React 18 + Vite |
+| Routing | React Router DOM v6 |
+| HTTP Client | Axios |
+| Styling | CSS Modules |
+| Authentication | JWT (stored in localStorage) |
+
+---
+
+## Features Implemented
+
+| Feature | Status |
+|---------|--------|
+| User Registration | ✅ |
+| User Login | ✅ |
+| JWT Token Storage | ✅ |
+| Protected Routes | ✅ |
+| Task List View | ✅ |
+| Create Task | ✅ |
+| Edit Task | ✅ |
+| Delete Task | ✅ |
+| User Profile | ✅ |
+| Logout | ✅ |
+
+---
+
+## Setup Instructions
+
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+
+### Installation
 
 ```bash
-VITE_AUTH_API_BASE_URL=http://127.0.0.1:8000
-```
+# 1. Clone the repository
+git clone https://github.com/bluTru3/task_manager_client
+cd taskmanager-frontend
 
-You can override endpoint paths if your backend uses different routes:
+# 2. Install dependencies
+npm install
 
-```bash
-VITE_AUTH_REGISTER_PATH=/api/auth/register/
-VITE_AUTH_LOGIN_PATH=/api/auth/login/
-VITE_AUTH_ME_PATH=/api/auth/profile/
-VITE_AUTH_REFRESH_PATH=/api/auth/token/refresh/
-```
+# 3. Create environment file
+cp .env.example .env.local
 
-## Development
+# 4. Update the API URL in .env.local
+# VITE_API_URL=http://localhost:8000/api
 
-- `npm install`
-- `npm run dev`
-- `npm run lint`
-- `npm run build`
-
-## Screenshots
-
-### Login Page
-![Login Page](screenshots/login.png)
-
-### Register Page
-![Register Page](screenshots/register.png)
-
-### Task Dashboard
-![Task Dashboard](screenshots/dashboard.png)
-
-### Create Task
-![Create Task](screenshots/create-task.png)
-
-### Backend API Evidence
-![API Endpoints](screenshots/api-endpoints.png)
+# 5. Start development server
+npm run dev
