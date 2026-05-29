@@ -1,16 +1,45 @@
-# React + Vite
+# Task Manager Client
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This app includes a frontend auth flow wired to a backend API.
 
-Currently, two official plugins are available:
+## Backend Contract
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The frontend calls these endpoints by default:
 
-## React Compiler
+- `POST /api/auth/register/`
+- `POST /api/auth/login/`
+- `GET /api/auth/profile/` (`/api/auth/me/` also supported by backend)
+- `PATCH /api/auth/profile/` (`/api/auth/me/` alias)
+- `POST /api/auth/token/refresh/`
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The API may return the user directly or nested under `user`, `profile`, `account`, or `data`.
 
-## Expanding the ESLint configuration
+JWT transport:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- Tokens are read from `access` and `refresh` response fields.
+- Authenticated requests send `Authorization: Bearer <access>`.
+- On `401`, protected requests rotate the access token with the refresh token and retry once.
+
+## Environment
+
+Set the API base URL in `.env`:
+
+```bash
+VITE_AUTH_API_BASE_URL=http://127.0.0.1:8000
+```
+
+You can override endpoint paths if your backend uses different routes:
+
+```bash
+VITE_AUTH_REGISTER_PATH=/api/auth/register/
+VITE_AUTH_LOGIN_PATH=/api/auth/login/
+VITE_AUTH_ME_PATH=/api/auth/profile/
+VITE_AUTH_REFRESH_PATH=/api/auth/token/refresh/
+```
+
+## Development
+
+- `npm install`
+- `npm run dev`
+- `npm run lint`
+- `npm run build`

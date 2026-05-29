@@ -1,121 +1,118 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { useAuth } from './auth/authContext.js'
+import { LoginPage } from './auth/LoginPage.jsx'
+import { ProfilePage } from './auth/ProfilePage.jsx'
+import { RegisterPage } from './auth/RegisterPage.jsx'
+import { TaskListPage } from './tasks/TaskListPage.jsx'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { currentUser, isAuthenticated, logout, authReady, authLoading } = useAuth()
+  const [activeView, setActiveView] = useState('register')
+  const visibleView = isAuthenticated
+    ? activeView === 'register' || activeView === 'login'
+      ? 'tasks'
+      : activeView
+    : activeView === 'tasks' || activeView === 'profile'
+      ? 'login'
+      : activeView
+
+  const pages = {
+    register: (
+      <RegisterPage
+        onSwitchToLogin={() => setActiveView('login')}
+        onAuthSuccess={() => setActiveView('profile')}
+      />
+    ),
+    login: (
+      <LoginPage
+        onSwitchToRegister={() => setActiveView('register')}
+        onAuthSuccess={() => setActiveView('profile')}
+      />
+    ),
+    profile: <ProfilePage key={currentUser?.id ?? 'profile'} />,
+    tasks: <TaskListPage key={currentUser?.id ?? 'tasks'} />,
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
+    <main className="auth-app-shell">
+      <section className="auth-hero">
+        <div className="auth-hero__copy">
+          <p className="eyebrow">Task Manager Client</p>
+          <h1>Auth flow that feels like part of the product, not a demo.</h1>
+          <p className="lead">
+            Register, sign in, and edit your profile from one shared auth state.
+            Everything persists locally so the flow behaves like a real app while
+            staying self-contained.
           </p>
+          <div className="auth-badges" aria-label="Auth capabilities">
+            <span>Validation</span>
+            <span>API session</span>
+            <span>Profile editing</span>
+            <span>Bearer or cookie auth</span>
+          </div>
         </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
+
+        <aside className="auth-session-card" aria-live="polite">
+          <p className="session-label">Current session</p>
+          {!authReady ? (
+            <>
+              <strong>Restoring session</strong>
+              <span>Checking the backend for an active login.</span>
+            </>
+          ) : isAuthenticated ? (
+            <>
+              <strong>{currentUser.username || currentUser.name}</strong>
+              <span>{currentUser.email}</span>
+              <span>{currentUser.company || 'No company set'}</span>
+              <button type="button" className="ghost-button" onClick={logout}>
+                {authLoading ? 'Signing out...' : 'Sign out'}
+              </button>
+            </>
+          ) : (
+            <>
+              <strong>No active session</strong>
+              <span>Use the tabs below to register or sign in with the backend.</span>
+            </>
+          )}
+        </aside>
       </section>
 
-      <div className="ticks"></div>
+      <section className="auth-panel">
+        <div className="auth-panel__nav" role="tablist" aria-label="Auth pages">
+          <button
+            type="button"
+            className={visibleView === 'register' ? 'tab is-active' : 'tab'}
+            onClick={() => setActiveView('register')}
+          >
+            Register
+          </button>
+          <button
+            type="button"
+            className={visibleView === 'login' ? 'tab is-active' : 'tab'}
+            onClick={() => setActiveView('login')}
+          >
+            Login
+          </button>
+          <button
+            type="button"
+            className={visibleView === 'profile' ? 'tab is-active' : 'tab'}
+            onClick={() => setActiveView('profile')}
+          >
+            Profile
+          </button>
+          <button
+            type="button"
+            className={visibleView === 'tasks' ? 'tab is-active' : 'tab'}
+            onClick={() => setActiveView('tasks')}
+          >
+            Tasks
+          </button>
+        </div>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
+        <div className="auth-panel__body">{pages[visibleView]}</div>
       </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+    </main>
   )
 }
 
