@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { AuthContext } from './authContext.js'
+import { AuthContext } from './authContext.jsx'
 import {
   fetchCurrentUser,
   fetchTasks,

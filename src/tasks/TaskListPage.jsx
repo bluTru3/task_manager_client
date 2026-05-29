@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import TaskFilters from '../components/TaskFilters.jsx'
-import { useAuth } from '../auth/authContext.js'
+import { useAuth } from '../auth/authContext.jsx'
 
 const DEFAULT_FILTERS = {
   status: '',

@@ -1,57 +1,57 @@
-import { useState } from 'react'
-import { useAuth } from './authContext.js'
+import { useState } from 'react';
+import { useAuth } from './authContext.jsx';
 
 function validate(values) {
-  const nextErrors = {}
+  const nextErrors = {};
 
   if (!values.username.trim()) {
-    nextErrors.username = 'Username is required.'
+    nextErrors.username = 'Username is required.';
   }
 
   if (!values.password) {
-    nextErrors.password = 'Password is required.'
+    nextErrors.password = 'Password is required.';
   }
 
-  return nextErrors
+  return nextErrors;
 }
 
 export function LoginPage({ onSwitchToRegister, onAuthSuccess }) {
-  const { login, authError, setAuthError, authLoading } = useAuth()
+  const { login, authError, setAuthError, authLoading } = useAuth();
   const [formValues, setFormValues] = useState({
     username: '',
     password: '',
-  })
-  const [fieldErrors, setFieldErrors] = useState({})
-  const [successMessage, setSuccessMessage] = useState('')
+  });
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [successMessage, setSuccessMessage] = useState('');
 
   function handleChange(event) {
-    const { name, value } = event.target
-    setFormValues((currentValues) => ({ ...currentValues, [name]: value }))
+    const { name, value } = event.target;
+    setFormValues((currentValues) => ({ ...currentValues, [name]: value }));
 
     if (fieldErrors[name]) {
-      setFieldErrors((currentErrors) => ({ ...currentErrors, [name]: '' }))
+      setFieldErrors((currentErrors) => ({ ...currentErrors, [name]: '' }));
     }
 
-    setSuccessMessage('')
-    setAuthError('')
+    setSuccessMessage('');
+    setAuthError('');
   }
 
   async function handleSubmit(event) {
-    event.preventDefault()
+    event.preventDefault();
 
-    const nextErrors = validate(formValues)
-    setFieldErrors(nextErrors)
+    const nextErrors = validate(formValues);
+    setFieldErrors(nextErrors);
 
     if (Object.keys(nextErrors).length > 0) {
-      return
+      return;
     }
 
     try {
-      await login(formValues)
-      setSuccessMessage('You are signed in and ready to update your profile.')
-      onAuthSuccess?.()
+      await login(formValues);
+      setSuccessMessage('You are signed in and ready to update your profile.');
+      onAuthSuccess?.();
     } catch (error) {
-      setAuthError(error instanceof Error ? error.message : 'Sign in failed.')
+      setAuthError(error instanceof Error ? error.message : 'Sign in failed.');
     }
   }
 
@@ -121,5 +121,5 @@ export function LoginPage({ onSwitchToRegister, onAuthSuccess }) {
         </div>
       </aside>
     </div>
-  )
+  );
 }

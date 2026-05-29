@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAuth } from './auth/authContext.js'
+import { useAuth } from './auth/authContext.jsx'
 import { LoginPage } from './auth/LoginPage.jsx'
 import { ProfilePage } from './auth/ProfilePage.jsx'
 import { RegisterPage } from './auth/RegisterPage.jsx'

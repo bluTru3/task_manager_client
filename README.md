@@ -43,3 +43,20 @@ VITE_AUTH_REFRESH_PATH=/api/auth/token/refresh/
 - `npm run dev`
 - `npm run lint`
 - `npm run build`
+
+## Screenshots
+
+### Login Page
+![Login Page](screenshots/login.png)
+
+### Register Page
+![Register Page](screenshots/register.png)
+
+### Task Dashboard
+![Task Dashboard](screenshots/dashboard.png)
+
+### Create Task
+![Create Task](screenshots/create-task.png)
+
+### Backend API Evidence
+![API Endpoints](screenshots/api-endpoints.png)
